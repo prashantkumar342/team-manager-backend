@@ -1,0 +1,16 @@
+import { Router } from 'express';
+import authRoutes from '@/modules/auth/auth.routes';
+import userRoutes from '@/modules/user/user.routes';
+import teamRoutes from '@/modules/team/team.routes';
+import projectRoutes from '@/modules/project/project.routes';
+import taskRoutes from '@/modules/task/task.routes';
+
+const router = Router();
+
+router.use('/auth', authRoutes);
+router.use('/user', userRoutes);
+router.use('/team', teamRoutes);
+router.use('/project', projectRoutes);
+router.use('/task', taskRoutes);
+
+export default router;
