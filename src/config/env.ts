@@ -12,6 +12,7 @@ const required = (key: string): string => {
 
 export const ENV = {
   NODE_ENV: process.env.NODE_ENV || 'development',
+  APP_URL: process.env.APP_URL || 'http://localhost:5173',
   PORT: Number(process.env.PORT || 5000),
   MONGO_URI: required('MONGO_URI'),
   JWT_SECRET: process.env.JWT_SECRET!,

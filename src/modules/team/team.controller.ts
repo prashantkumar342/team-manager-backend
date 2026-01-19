@@ -81,6 +81,28 @@ const teamController = {
     }
   },
 
+  async updateTeam(req: Request, res: Response) {
+    try {
+      const teamId = req.query.teamId as string;
+      const { name, description } = req.body;
+
+      if (!teamId) throw new ApiError(400, 'teamId is required');
+      if (!name && !description) {
+        throw new ApiError(400, 'Nothing to update');
+      }
+
+      const team = await teamService.updateTeam({
+        teamId,
+        name,
+        description,
+      });
+
+      res.status(200).json(new ApiResponse('Team updated successfully', { team }));
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async deleteTeam(req: Request, res: Response) {
     try {
       const teamId = req.query.teamId as string;

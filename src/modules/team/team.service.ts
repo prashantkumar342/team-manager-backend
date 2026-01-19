@@ -24,6 +24,18 @@ const teamService = {
     return team;
   },
 
+  // ============================= update team =============================
+  async updateTeam({ teamId, name, description }: { teamId: string; name?: string; description?: string }) {
+    const team = await Team.findById(teamId);
+    if (!team) throw new ApiError(404, 'Team not found');
+
+    if (name !== undefined) team.name = name;
+    if (description !== undefined) team.description = description;
+
+    await team.save();
+    return team;
+  },
+
   // ================= create team =================
   async createTeam({ name, description, user }: { name: string; description: string; user: IUser }) {
     const team = new Team({
