@@ -1,65 +1,37 @@
-import express from 'express';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
+import http from 'http';
+import app from './app';
+import { connectDB } from './config/db';
+import { Server } from 'socket.io';
+import { setupSocket } from './socket';
+import { ENV } from './config/env';
 
-dotenv.config();
+export const startServer = async (): Promise<void> => {
+  try {
+    await connectDB();
 
-const app = express();
+    const server = http.createServer(app);
+    // initSocket server;
 
-/* =======================
-   CORS CONFIG (FIXED)
-======================= */
+    const io = new Server(server, {
+      cors: {
+        origin: process.env.APP_URL,
+        credentials: true,
+      },
+    });
 
-const allowedOrigins = ['https://teammngr.netlify.app', 'http://localhost:5173'];
+    // make io available in controllers
+    app.locals.io = io;
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // allow server-to-server / postman / mobile apps
-      if (!origin) return callback(null, true);
+    setupSocket(io);
 
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+    const PORT = process.env.PORT || 5000;
+    server.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Server startup failed:', error);
+    process.exit(1);
+  }
+};
 
-      return callback(new Error('CORS not allowed'), false);
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  }),
-);
-
-// IMPORTANT: handle preflight
-app.options('*', cors());
-
-/* =======================
-   MIDDLEWARES
-======================= */
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-
-/* =======================
-   ROUTES
-======================= */
-
-// example
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'OK' });
-});
-
-// your routes here
-// app.use('/api/teammanager', teamManagerRoutes);
-
-/* =======================
-   SERVER
-======================= */
-
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+startServer();

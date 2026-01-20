@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
     "seed:users": "ts-node src/seeders/admin-manager.seeder.ts",
     "build": "tsc && tsc-alias && copyfiles -u 1 \"src/**/*.json\" dist/",
-    "start": "node -r tsconfig-paths/register dist/index.js",
+    "start": "node -r tsconfig-paths/register dist/server.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
