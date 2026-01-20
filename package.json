@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node -r tsconfig-paths/register index.ts",
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
     "seed:users": "ts-node src/seeders/admin-manager.seeder.ts",
-    "build": "tsc",
+    "build": "tsc && tsc-alias && copyfiles -u 1 \"src/**/*.json\" dist/",
+    "start": "node -r tsconfig-paths/register dist/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -24,6 +25,7 @@
     "@types/node": "^25.0.9",
     "@typescript-eslint/eslint-plugin": "^8.53.0",
     "@typescript-eslint/parser": "^8.53.0",
+    "copyfiles": "^2.4.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
@@ -32,6 +34,7 @@
     "nodemon": "^3.1.11",
     "prettier": "^3.8.0",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.16",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"
   },

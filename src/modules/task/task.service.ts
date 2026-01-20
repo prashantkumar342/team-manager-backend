@@ -12,17 +12,20 @@ const taskService = {
   async createTask({
     title,
     description,
+    teamId,
     projectId,
     assignedTo,
   }: {
     title: string;
     description?: string;
+    teamId: string;
     projectId: string;
     assignedTo?: string;
   }) {
     const task = await Task.create({
       title,
       description,
+      teamId: new Types.ObjectId(teamId),
       projectId: new Types.ObjectId(projectId),
       assignedTo: assignedTo ? new Types.ObjectId(assignedTo) : undefined,
     });

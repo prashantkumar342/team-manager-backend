@@ -4,6 +4,7 @@ import teamService from './team.service';
 import { ApiResponse } from '@/utils/apiResponse';
 import { ApiError } from '@/utils/apiError';
 import { User } from '../user/user.model';
+import { MemberRole } from './team.model';
 
 const teamController = {
   async getTeams(req: Request, res: Response) {
@@ -114,6 +115,52 @@ const teamController = {
     } catch (error) {
       throw error;
     }
+  },
+
+  async getTeamMembers(req: Request, res: Response) {
+    try {
+      const teamId = req.query.teamId as string;
+      const offset = Number(req.query.offset) || 0;
+      const limit = Number(req.query.limit) || 10; // Removed the + 1
+
+      if (!teamId) throw new ApiError(400, 'teamId is required');
+
+      // Result now contains { members, hasMore, total }
+      const result = await teamService.getTeamMembers({ teamId, offset, limit });
+
+      res.status(200).json(new ApiResponse('Team members retrieved successfully', result));
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async addMember(req: Request, res: Response) {
+    const teamId = req.query.teamId as string;
+    const { email } = req.body;
+
+    const team = await teamService.addMember(teamId, email);
+    res.status(200).json(new ApiResponse('Member added', team));
+  },
+
+  async removeMember(req: Request, res: Response) {
+    const teamId = req.query.teamId as string;
+    const { userId } = req.body;
+
+    const team = await teamService.removeMember(teamId, userId);
+    res.status(200).json(new ApiResponse('Member removed', team));
+  },
+
+  async updateMemberRole(req: Request, res: Response) {
+    const teamId = req.query.teamId as string;
+    const { userId, role } = req.body;
+
+    if (!Object.values(MemberRole).includes(role)) {
+      return res.status(400).json({ message: 'Invalid role' });
+    }
+
+    const team = await teamService.updateMemberRole(teamId, userId, role);
+
+    res.status(200).json(new ApiResponse('Member role updated', team));
   },
 };
 

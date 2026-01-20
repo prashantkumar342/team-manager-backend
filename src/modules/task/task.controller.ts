@@ -22,6 +22,7 @@ const taskController = {
   // ================= create task =================
   async createTask(req: Request, res: Response) {
     try {
+      const teamId = req.query.teamId as string;
       const { title, description, projectId, assignedTo } = req.body;
 
       if (!title || !projectId) throw new ApiError(400, 'title and projectId are required');
@@ -29,6 +30,7 @@ const taskController = {
       const task = await taskService.createTask({
         title,
         description,
+        teamId,
         projectId,
         assignedTo,
       });

@@ -3,6 +3,7 @@ import { verifyFirebaseToken } from '@/middlewares/firebaseAuth.middleware';
 import teamController from './team.controller';
 import { verifyTeamAdmin } from '@/middlewares/adminAuth.middleware';
 import { verifyTeamAdminOrManager } from '@/middlewares/verifyTeamAdminOrManager';
+import { verifyTeamMember } from '@/middlewares/verifyTeamMember.middleware';
 
 const router = Router();
 
@@ -13,5 +14,11 @@ router.put('/update', verifyTeamAdminOrManager, teamController.updateTeam);
 router.post('/create-team', verifyFirebaseToken, teamController.createTeam);
 router.post('/toggle-add-member/:teamId', verifyTeamAdmin, teamController.toggleAddMember);
 router.post('/create-manager/:teamId', verifyTeamAdmin, teamController.createManager);
+router.get('/get-team-members', verifyTeamMember, teamController.getTeamMembers);
+router.post('/add-member', verifyTeamAdminOrManager, teamController.addMember);
+
+router.post('/remove-member', verifyTeamAdminOrManager, teamController.removeMember);
+
+router.put('/update-member-role', verifyTeamAdmin, teamController.updateMemberRole);
 
 export default router;

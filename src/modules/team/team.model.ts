@@ -17,6 +17,7 @@ export interface ITeam {
   name: string;
   description?: string;
   members: TeamMember[];
+  joinId: string;
   adminId: Types.ObjectId;
   managerId?: Types.ObjectId;
 }
@@ -29,6 +30,11 @@ const teamSchema = new Schema<ITeam>(
       trim: true,
     },
     description: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    joinId: {
       type: String,
       required: false,
       trim: true,

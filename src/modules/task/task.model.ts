@@ -11,6 +11,7 @@ export interface ITask {
   title: string;
   description?: string;
   status: TaskStatus;
+  teamId: Types.ObjectId;
   projectId: Types.ObjectId;
   assignedTo?: Types.ObjectId;
 }
@@ -30,6 +31,11 @@ const taskSchema = new Schema<ITask>(
       type: String,
       enum: Object.values(TaskStatus),
       default: TaskStatus.TODO,
+    },
+    teamId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Team',
+      required: true,
     },
     projectId: {
       type: Schema.Types.ObjectId,
