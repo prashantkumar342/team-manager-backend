@@ -15,6 +15,6 @@ app.use(
 app.use(express.json());
 
 // apis
-app.use('/api', router);
+app.use('/api/teammanager', router);
 
 export default app;
