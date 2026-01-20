@@ -137,7 +137,6 @@ const teamController = {
   async addMember(req: Request, res: Response) {
     const teamId = req.query.teamId as string;
     const { email } = req.body;
-
     const team = await teamService.addMember(teamId, email);
     res.status(200).json(new ApiResponse('Member added', team));
   },
@@ -146,8 +145,8 @@ const teamController = {
     const teamId = req.query.teamId as string;
     const { userId } = req.body;
 
-    const team = await teamService.removeMember(teamId, userId);
-    res.status(200).json(new ApiResponse('Member removed', team));
+    const addedMember = await teamService.removeMember(teamId, userId);
+    res.status(200).json(new ApiResponse('Member removed', addedMember));
   },
 
   async updateMemberRole(req: Request, res: Response) {

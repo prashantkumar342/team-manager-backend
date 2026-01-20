@@ -152,23 +152,23 @@ const teamService = {
 
   async addMember(teamId: string, email: string) {
     if (!Types.ObjectId.isValid(teamId)) {
-      throw new Error('Invalid teamId');
+      throw new ApiError(400, 'Invalid teamId');
     }
 
     const team = await Team.findById(teamId);
     if (!team) {
-      throw new Error('Team not found');
+      throw new ApiError(404, 'Team not found');
     }
 
     const user = await User.findOne({ email });
     if (!user) {
-      throw new Error('User with this email does not exist');
+      throw new ApiError(404, 'User with this email does not exist');
     }
 
     const alreadyMember = team.members.some((m) => m.userId.equals(user._id));
 
     if (alreadyMember) {
-      throw new Error('User already in team');
+      throw new ApiError(400, 'User already in team');
     }
 
     team.members.push({
@@ -178,7 +178,16 @@ const teamService = {
     });
 
     await team.save();
-    return team;
+
+    // populate via parent document (TS-safe)
+    await team.populate({
+      path: 'members.userId',
+      select: '_id uid email name',
+    });
+
+    const newMember = team.members[team.members.length - 1];
+
+    return newMember;
   },
 
   async removeMember(teamId: string, userId: string) {
