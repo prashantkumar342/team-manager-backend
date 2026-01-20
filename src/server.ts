@@ -14,7 +14,7 @@ export const startServer = async (): Promise<void> => {
 
     const io = new Server(server, {
       cors: {
-        origin: ENV.APP_URL,
+        origin: process.env.APP_URL,
         credentials: true,
       },
     });
