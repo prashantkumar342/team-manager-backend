@@ -7,6 +7,7 @@ import { ENV } from './config/env';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import router from './routes';
+import { initServer } from './app';
 
 export const startServer = async (): Promise<void> => {
   try {
@@ -14,19 +15,7 @@ export const startServer = async (): Promise<void> => {
 
     const app = express();
 
-    app.use(cookieParser());
-    app.use(
-      cors({
-        credentials: true,
-        origin: process.env.APP_URL,
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-      }),
-    );
-    app.use(express.json());
-
-    // apis
-    app.use('/api/teammanager', router);
+    initServer(app);
 
     const server = http.createServer(app);
     // initSocket server;

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
     "seed:users": "ts-node src/seeders/admin-manager.seeder.ts",
+    "nlp:train": "ts-node src/modules/assistant/nlp.ts",
     "build": "tsc && tsc-alias && copyfiles -u 1 \"src/**/*.json\" dist/",
     "start": "node -r tsconfig-paths/register dist/server.js",
     "lint": "eslint .",
@@ -22,7 +23,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^8.5.9",
-    "@types/node": "^25.0.9",
+    "@types/node": "^25.0.10",
     "@typescript-eslint/eslint-plugin": "^8.53.0",
     "@typescript-eslint/parser": "^8.53.0",
     "copyfiles": "^2.4.1",
@@ -39,15 +40,23 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@langchain/community": "^1.1.7",
+    "@langchain/core": "^1.1.17",
+    "@langchain/google-genai": "^2.1.13",
+    "@langchain/ollama": "^1.2.1",
+    "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
+    "chromadb": "^3.2.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "firebase-admin": "^13.6.0",
+    "gpt-tokenizer": "^3.4.0",
     "joi": "^18.0.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^9.1.4",
+    "natural": "^8.1.0",
     "socket.io": "^4.8.3"
   }
 }
