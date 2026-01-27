@@ -13,16 +13,20 @@ const chromaClient = new ChromaClient({
 
 async function runSeeder() {
   try {
+    // use the docs file of context to make vectors
     const docsPath = path.join(__dirname, 'docs.md');
     const raw = fs.readFileSync(docsPath, 'utf-8');
 
+    // make chunks of the text from docs file
     const chunks = chunkText(raw, 400);
 
+    // create or get collection from vector db
     const collection = await chromaClient.getOrCreateCollection({
       name: 'team_manager_embeddings',
       embeddingFunction: null,
     });
 
+    // use a model to make embeddings
     const embeddingsModel = new OllamaEmbeddings({
       model: 'nomic-embed-text',
       baseUrl: 'http://localhost:11434',
