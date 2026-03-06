@@ -32,8 +32,10 @@ async function runSeeder() {
       baseUrl: 'http://localhost:11434',
     });
 
+    // make emveddings now
     const embeddings = await embeddingsModel.embedDocuments(chunks);
 
+    // add embeddings to the collection
     await collection.add({
       ids: chunks.map((_, i) => `docs-${i}`),
       documents: chunks,
